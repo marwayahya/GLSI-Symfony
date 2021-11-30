@@ -87,7 +87,8 @@ class VoitureController extends AbstractController
 
         $editform->handleRequest($request);
 
-        if ($editform->isSubmitted() and $editform->isValid()) {
+        if ($editform->isSubmitted() and $editform->isValid())
+        {
             $em->persist($voiture);
             $em->flush();
 
@@ -96,6 +97,28 @@ class VoitureController extends AbstractController
             return $this->render('voiture/updateVoiture.html.twig', [
             'editFormVoiture'=>$editform->createView()
             ]);
+    }
+
+    /**
+     * @Route("/searchVoiture", name="voitureSearch")
+     */
+    public function searchVoiture(Request $request): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $voitures = null;
+        if($request->isMethod('POST'))
+        {
+            $serie = $request->request->get("input_serie");
+            $query = $em->createQuery(
+                " SELECT v FROM App\Entity\Voiture v where v.serie LIKE '".$serie."' ");
+            $voitures = $query->getResult();
+
+
+
+        }
+
+        return $this->render("voiture/rechercheVoiture.html.twig",
+        ["voitures"=>$voitures]);
     }
         
     

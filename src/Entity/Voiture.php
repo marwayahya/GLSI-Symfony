@@ -39,6 +39,11 @@ class Voiture
      */
     private $locations;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Modele::class, inversedBy="voiture")
+     */
+    private $modele;
+
     public function __construct()
     {
         $this->locations = new ArrayCollection();
@@ -111,6 +116,18 @@ class Voiture
                 $location->setVoiture(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getModele(): ?Modele
+    {
+        return $this->modele;
+    }
+
+    public function setModele(?Modele $modele): self
+    {
+        $this->modele = $modele;
 
         return $this;
     }
